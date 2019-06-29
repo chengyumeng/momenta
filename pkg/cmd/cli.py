@@ -14,8 +14,6 @@ from pkg.bot.wechat import do_send_message
 from pkg.bot.callback import callback
 from pkg.cron.cron import app
 
-VERSION='0.0.1'
-
 Daily = 'daily'
 Sunday = 'sunday'
 Mounday = ''
@@ -97,7 +95,7 @@ def cli():
 
 @click.command()
 def version():
-    print('momenta {}'.format(VERSION))
+    print('momenta {}'.format('beta'))
 
 
 cli.add_command(subscription)

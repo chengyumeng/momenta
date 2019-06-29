@@ -3,7 +3,6 @@
 
 from setuptools import setup, find_packages, Command
 import os
-import imp
 
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root."""
@@ -23,12 +22,9 @@ install_requires = [
     'itchat==1.3.10', 'pymongo==3.8.0', 'schedule==0.6.0', 'Click==7.0',
 ]
 
-version = imp.load_source(
-    'pkg.cmd.cli.version', os.path.join('pkg', 'cmd','cli.py')).VERSION
-
 
 setup(
-      version=version,
+      version='0.0.2',
       name='momenta',
       author='ChengTian',
       description='',
