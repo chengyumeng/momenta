@@ -24,7 +24,7 @@ install_requires = [
 
 
 setup(
-      version='0.0.2',
+      version='0.0.3',
       name='momenta',
       author='ChengTian',
       description='',

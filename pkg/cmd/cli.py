@@ -67,9 +67,13 @@ subscription.add_command(remove_subscription, name='remove')
 subscription.add_command(enable_subscription, name='enable')
 
 
-@click.command()
-def run():
-    itchat.auto_login(hotReload=True)
+@click.command(help='启动一个微信机器人')
+@click.option('--cmdqr', default=False, help='是否通过控制台输出二维码')
+def run(cmdqr):
+    if cmdqr:
+        itchat.auto_login(hotReload=True, enableCmdQR=2)
+    else:
+        itchat.auto_login(hotReload=True)
     callback.xiaoice = itchat.search_mps(name='小冰')[0]['UserName']
     for data in client.momenta.subscription.find({'enable': True}, {'_id': 0, 'trigger': 1, 'nickname': 1, 'action': 1}):
         try:
