@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*
 
 import click
-import os
-import pymongo
 from bson.objectid import ObjectId
 import schedule
 import itchat
 import _thread
 import time
 
+from pkg.job.client import client,regist_job
 from pkg.bot.wechat import do_send_message
 from pkg.bot.callback import callback
 from pkg.cron.cron import app
@@ -17,8 +16,6 @@ from pkg.cron.cron import app
 Daily = 'daily'
 Sunday = 'sunday'
 Mounday = ''
-
-client = pymongo.MongoClient('mongodb://%s:%s@%s' % (os.getenv('MOMENTA_MONGO_USER'), os.getenv('MOMENTA_MONGO_PASSWORD'),os.getenv('MOMENTA_MONGO_HOST')))
 
 
 @click.group(help='与群组、好友咨询订阅相关的操作')
@@ -75,11 +72,6 @@ def run(cmdqr):
     else:
         itchat.auto_login(hotReload=True)
     callback.xiaoice = itchat.search_mps(name='小冰')[0]['UserName']
-    for data in client.momenta.subscription.find({'enable': True}, {'_id': 0, 'trigger': 1, 'nickname': 1, 'action': 1}):
-        try:
-            schedule.every().day.at("10:15").do(do_send_message,data['nickname'], app.do(data['action']))
-        except Exception as e:
-            print(e)
 
     def sche():
         while True:
@@ -87,6 +79,7 @@ def run(cmdqr):
             time.sleep(1)
             print('scheduling job {}'.format(time.time()))
 
+    _thread.start_new_thread(regist_job, ())
     _thread.start_new_thread(sche, ())
     _thread.start_new_thread(callback.consume,())
     itchat.run(True)
