@@ -14,7 +14,7 @@ msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
 """
 
 
-@app.action('/calendar')
+@app.action('calendar')
 def calendar():
     try:
         conn = http.client.HTTPSConnection('www.mxnzp.com')

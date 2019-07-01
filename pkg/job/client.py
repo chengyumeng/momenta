@@ -13,6 +13,6 @@ client = pymongo.MongoClient('mongodb://%s:%s@%s' % (os.getenv('MOMENTA_MONGO_US
 def regist_job():
     try:
         for data in client.momenta.subscription.find({'enable': True}, {'_id': 0, 'trigger': 1, 'nickname': 1, 'action': 1}):
-            schedule.every().day.at("10:15").do(do_send_message,data['nickname'], app.do(data['action']))
+            schedule.every().day.at('10:32').do(do_send_message, data['nickname'], app.do(data['action']))
     except Exception as e:
         print(e)

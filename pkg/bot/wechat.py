@@ -26,12 +26,18 @@ def map_reply(msg):
             itchat.send_image(msg['FileName'], callback.msg.FromUserName)
         elif msg['Type'] == 'Text':
             itchat.send_msg(msg.text, callback.msg.FromUserName)
+        elif msg['Type'] == 'VIDEO':
+            print(msg)
+            msg['Text'](msg['FileName'])
+            itchat.send_video( msg['FileName'], callback.msg.FromUserName)
         else:
             print(msg)
+            msg['Text'](msg['FileName'])
+            itchat.send_video(msg['FileName'], callback.msg.FromUserName)
         callback.msg = None
 
 
-def do_send_message(nickName,msg):
+def do_send_message(nickName, msg):
     data = itchat.search_chatrooms(name=nickName)
     if data is not None:
         for u in data:

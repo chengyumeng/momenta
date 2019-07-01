@@ -9,9 +9,7 @@ import _thread
 import time
 
 from pkg.job.client import client,regist_job
-from pkg.bot.wechat import do_send_message
 from pkg.bot.callback import callback
-from pkg.cron.cron import app
 
 Daily = 'daily'
 Sunday = 'sunday'
@@ -64,6 +62,14 @@ subscription.add_command(remove_subscription, name='remove')
 subscription.add_command(enable_subscription, name='enable')
 
 
+def sche():
+    while True:
+        schedule.run_pending()
+        time.sleep(15)
+        print('scheduling job {}'.format(time.time()))
+        print(schedule.jobs)
+
+
 @click.command(help='启动一个微信机器人')
 @click.option('--cmdqr', default=False, help='是否通过控制台输出二维码')
 def run(cmdqr):
@@ -71,18 +77,15 @@ def run(cmdqr):
         itchat.auto_login(hotReload=True, enableCmdQR=2)
     else:
         itchat.auto_login(hotReload=True)
-    callback.xiaoice = itchat.search_mps(name='小冰')[0]['UserName']
+    callback.xiaoice = itchat.search_mps(name='中关村男子图鉴')[0]['UserName']
 
-    def sche():
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
-            print('scheduling job {}'.format(time.time()))
-
-    _thread.start_new_thread(regist_job, ())
+    _thread.start_new_thread(callback.consume, ())
+    _thread.start_new_thread(itchat.run, ())
+    regist_job()
     _thread.start_new_thread(sche, ())
-    _thread.start_new_thread(callback.consume,())
+
     itchat.run(True)
+
 
 
 @click.group()
