@@ -8,7 +8,7 @@ import itchat
 import _thread
 import time
 
-from pkg.job.client import client,regist_job
+from pkg.job.client import client, regist_job, daily_job
 from pkg.bot.callback import callback
 
 Daily = 'daily'
@@ -56,10 +56,16 @@ def enable_subscription(id):
     print(x)
 
 
+@click.command(help='测试订阅')
+def test_subscription():
+    daily_job()
+
+
 subscription.add_command(list_subscription, name='list')
 subscription.add_command(create_subscription, name='create')
 subscription.add_command(remove_subscription, name='remove')
 subscription.add_command(enable_subscription, name='enable')
+subscription.add_command(test_subscription, name='test')
 
 
 def sche():
@@ -85,7 +91,6 @@ def run(cmdqr):
     _thread.start_new_thread(sche, ())
 
     itchat.run(True)
-
 
 
 @click.group()

@@ -13,7 +13,9 @@ client = pymongo.MongoClient('mongodb://%s:%s@%s' % (os.getenv('MOMENTA_MONGO_US
 def daily_job():
     for data in client.momenta.subscription.find({'enable': True},
                                                  {'_id': 0, 'trigger': 1, 'nickname': 1, 'action': 1}):
-        do_send_message(data['nickname'], app.do(data['action']))
+        msg = app.do(data['action'])
+        print('{}   {} \n {}'.format(data['nickname'], data['action'], msg))
+        do_send_message(data['nickname'], msg)
 
 
 def regist_job():
