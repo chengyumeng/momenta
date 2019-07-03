@@ -31,6 +31,6 @@ def calendar():
                           motto['Body']['word'], motto['Body']['word_from'])
     except Exception as e:
         print(e)
-        return msg.format(datetime.datetime, 'x','y',e, 'momenta 出现异常！')
+        return msg.format(datetime.date, 'x','y',e, 'momenta 出现异常！')
 
 
