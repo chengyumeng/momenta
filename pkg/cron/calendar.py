@@ -17,11 +17,11 @@ msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
 @app.action('calendar')
 def calendar():
     try:
-        conn = http.client.HTTPSConnection('www.mxnzp.com')
+        conn = http.client.HTTPSConnection('https://www.mxnzp.com')
         headers = {'cache-control': 'no-cache'}
         conn.request('GET', '/api/holiday/single/{}'.format(datetime.date.today().strftime('%Y%m%d')), headers=headers)
         dateInfo = json.loads(conn.getresponse().read().decode('utf-8'))
-        conn = http.client.HTTPSConnection('api.hibai.cn')
+        conn = http.client.HTTPSConnection('https://api.hibai.cn')
         payload = 'TransCode=030111&OpenId=123456789'
         headers = {
             'content-type': 'application/x-www-form-urlencoded',
