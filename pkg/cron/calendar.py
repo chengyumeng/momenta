@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
 
-import http.client
+import requests
 import datetime
 import json
 
@@ -17,17 +17,16 @@ msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
 @app.action('calendar')
 def calendar():
     try:
-        conn = http.client.HTTPSConnection('https://www.mxnzp.com')
+        url ='https://www.mxnzp.com/api/holiday/single/{}'.format(datetime.date.today().strftime('%Y%m%d'))
         headers = {'cache-control': 'no-cache'}
-        conn.request('GET', '/api/holiday/single/{}'.format(datetime.date.today().strftime('%Y%m%d')), headers=headers)
-        dateInfo = json.loads(conn.getresponse().read().decode('utf-8'))
-        conn = http.client.HTTPSConnection('https://api.hibai.cn')
+        dateInfo = json.loads(requests.request('GET', url, headers=headers).text)
+        url = "https://api.hibai.cn/api/index/index"
         payload = 'TransCode=030111&OpenId=123456789'
         headers = {
             'content-type': 'application/x-www-form-urlencoded',
         }
-        conn.request('POST', '/api/index/index', payload, headers)
-        motto = json.loads(conn.getresponse().read().decode('utf-8'))
+        response = requests.request("POST", url, data=payload, headers=headers)
+        motto = json.loads(response.text)
         return msg.format(dateInfo['data']['date'], dateInfo['data']['weekOfYear'], dateInfo['data']['dayOfYear'],
                           motto['Body']['word'], motto['Body']['word_from'])
     except Exception as e:
