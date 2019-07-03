@@ -86,7 +86,6 @@ def run(cmdqr):
     callback.xiaoice = itchat.search_mps(name='中关村男子图鉴')[0]['UserName']
 
     _thread.start_new_thread(callback.consume, ())
-    _thread.start_new_thread(itchat.run, ())
     regist_job()
     _thread.start_new_thread(sche, ())
 
