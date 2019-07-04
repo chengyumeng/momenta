@@ -56,16 +56,28 @@ def enable_subscription(id):
     print(x)
 
 
-@click.command(help='测试订阅')
-def test_subscription():
-    daily_job()
-
-
 subscription.add_command(list_subscription, name='list')
 subscription.add_command(create_subscription, name='create')
 subscription.add_command(remove_subscription, name='remove')
 subscription.add_command(enable_subscription, name='enable')
-subscription.add_command(test_subscription, name='test')
+
+@click.group(help='制定消息过滤规则')
+def filter():
+    pass
+
+@click.command(help='创建一个消息过滤规则')
+@click.option('--key', default='ActualNickName', help='订阅触发的周期')
+@click.option('--nickname', default='', help='匹配数据 nickname(群名、好友名字)')
+@click.option('--regular', default='', help='匹配正则')
+@click.option('--warning', default='', help='警告信息')
+@click.option('--enable', default=True, help='是否默认生效')
+def create_filter(key, nickname, regular, warning, enable):
+    id = client.momenta.message.insert_one(
+        {'key': key, 'nickname': nickname, 'regular': regular, 'warning': warning,'enable': enable}).inserted_id
+    print(id)
+
+
+filter.add_command(create_filter, name='create')
 
 
 def sche():
@@ -105,6 +117,8 @@ def version():
 cli.add_command(subscription)
 cli.add_command(run)
 cli.add_command(version)
+cli.add_command(filter)
+
 
 
 def main():
