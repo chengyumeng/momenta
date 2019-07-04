@@ -57,7 +57,12 @@ def at(msg):
 
 
 @callback.action('/chat')
-def dochat(msg):
+def do_chat(msg):
     callback.add(msg)
+
+
+@callback.action('/group/manage')
+def do_group_manage(msg):
+    print(msg)
 
 

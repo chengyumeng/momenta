@@ -14,6 +14,7 @@ def text_reply(msg):
 
 @itchat.msg_register(itchat.content.TEXT, False, True,)
 def text_reply(msg):
+    callback.do('/group/manage', msg)
     if msg.IsAt:
         callback.do('@', msg)
 
