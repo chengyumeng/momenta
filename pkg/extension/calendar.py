@@ -5,6 +5,8 @@ import requests
 import datetime
 import json
 
+from logbook import Logger
+
 from pkg.cron.cron import app
 
 msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
@@ -13,6 +15,7 @@ msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
 —— {}
 """
 
+logger = Logger('calendar')
 
 @app.action('calendar')
 def calendar():
@@ -30,5 +33,5 @@ def calendar():
         return msg.format(dateInfo['data']['date'], dateInfo['data']['weekOfYear'], dateInfo['data']['dayOfYear'],
                           motto['Body']['word'], motto['Body']['word_from'])
     except Exception as e:
-        print(e)
+        logger.error(e)
         return msg.format(datetime.date, 'x','y',e, 'momenta 出现异常！')

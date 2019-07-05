@@ -3,9 +3,14 @@
 
 import re
 
+from logbook import Logger
+
 from pkg.bot.callback import callback
 from pkg.job.client import client
 from pkg.bot.wechat import do_send_message
+
+logger = Logger('action')
+
 
 @callback.action('/chat')
 def do_chat(msg):
@@ -20,4 +25,4 @@ def do_group_manage(msg):
             if re.match(data['regular'], msg[data['key']], re.M | re.I) is None:
                 do_send_message(data['nickname'], data['warning'])
         except Exception as e:
-            print(e)
+            logger.error('Failed to do group message'.format(e))

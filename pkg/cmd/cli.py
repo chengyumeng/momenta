@@ -7,6 +7,10 @@ import schedule
 import itchat
 import _thread
 import time
+import sys
+
+
+from logbook import Logger, StreamHandler
 
 from pkg.job.client import client, regist_job, daily_job
 from pkg.bot.callback import callback
@@ -14,6 +18,10 @@ from pkg.bot.callback import callback
 Daily = 'daily'
 Sunday = 'sunday'
 Mounday = ''
+
+StreamHandler(sys.stdout).push_application()
+
+logger = Logger('cli')
 
 
 @click.group(help='与群组、好友咨询订阅相关的操作')
@@ -24,7 +32,7 @@ def subscription():
 @click.command(help='列出所有的订阅')
 def list_subscription():
     for data in client.momenta.subscription.find({}, {'_id': 1, 'trigger': 1, 'nickname': 1,'enable': 1,'action': 1}):
-        print(data)
+        logger.info(data)
 
 
 @click.command(help='创建一个订阅')
@@ -35,7 +43,7 @@ def list_subscription():
 def create_subscription(trigger, nickname, action, enable):
     id = client.momenta.subscription.insert_one(
         {'trigger': trigger, 'nickname': nickname, 'action': action, 'enable': enable}).inserted_id
-    print(id)
+    logger.info(id)
 
 
 @click.command(help='删除一个订阅')
@@ -46,20 +54,21 @@ def remove_subscription(force, id):
         x = client.momenta.subscription.delete_one({'_id': ObjectId(id)})
     else:
         x = client.momenta.subscription.update_one({'_id': ObjectId(id)}, {'$set': {'enable': False}})
-    print(x)
+    logger.warning('Success to remove subscription {}'.format(x))
 
 
 @click.command(help='标记一个订阅为可用')
 @click.option('--id', default='', help='待订阅订阅的 ID')
 def enable_subscription(id):
     x = client.momenta.subscription.update_one({'_id': ObjectId(id)}, {"$set": {"enable": True}})
-    print(x)
+    logger.info('Success to enable subscription {}'.format(x))
 
 
 subscription.add_command(list_subscription, name='list')
 subscription.add_command(create_subscription, name='create')
 subscription.add_command(remove_subscription, name='remove')
 subscription.add_command(enable_subscription, name='enable')
+
 
 @click.group(help='制定消息过滤规则')
 def filter():
@@ -74,7 +83,7 @@ def filter():
 def create_filter(key, nickname, regular, warning, enable):
     id = client.momenta.message.insert_one(
         {'key': key, 'nickname': nickname, 'regular': regular, 'warning': warning,'enable': enable}).inserted_id
-    print(id)
+    logger.info(id)
 
 
 filter.add_command(create_filter, name='create')
@@ -84,8 +93,8 @@ def sche():
     while True:
         schedule.run_pending()
         time.sleep(15)
-        print('scheduling job {}'.format(time.time()))
-        print(schedule.jobs)
+        logger.info('scheduling job {}'.format(time.time()))
+        logger.info(schedule.jobs)
 
 
 @click.command(help='启动一个微信机器人')
@@ -111,7 +120,7 @@ def cli():
 
 @click.command()
 def version():
-    print('momenta {}'.format('beta'))
+    logger.info('momenta {}'.format('beta'))
 
 
 cli.add_command(subscription)

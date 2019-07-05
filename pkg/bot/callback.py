@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*
 
 import itchat
+import time
+
+from logbook import Logger
+
+logger = Logger('callback')
+
 
 
 class Callback():
@@ -38,13 +44,15 @@ class Callback():
     def consume(self):
         while True:
             if self.msg is not None:
+                time.sleep(1)
+                logger.info('exist msg waiting for consume')
                 continue
             elif len(self.queue) > 0:
                 try:
                     self.msg = self.queue.pop(0)
                     itchat.send_msg(self.msg.text, self.xiaoice)
                 except Exception as e:
-                    print(e)
+                    logger.error('Failed to consume msg {}'.format(e))
 
 
 callback = Callback()
