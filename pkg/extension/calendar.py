@@ -17,6 +17,7 @@ msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
 
 logger = Logger('calendar')
 
+
 @app.action('calendar')
 def calendar():
     try:
