@@ -8,11 +8,13 @@ import itchat
 import _thread
 import time
 import sys
+import os
 
 
 from logbook import Logger, StreamHandler
+from pkg.bot.wechat import do_send_message
 
-from pkg.job.client import client, regist_job, daily_job
+from pkg.job.client import client, regist_job, get_message, set_done
 from pkg.bot.callback import callback
 
 Daily = 'daily'
@@ -112,6 +114,29 @@ def run(cmdqr):
 
     itchat.run(True)
 
+@click.command(help='启动定时推送的微信机器人')
+@click.option('--cmdqr', default=False, help='是否通过控制台输出二维码')
+def run2(cmdqr):
+    if cmdqr:
+        itchat.auto_login(hotReload=True, enableCmdQR=2)
+    else:
+        itchat.auto_login(hotReload=True)
+    def job():
+        try:
+            msg = get_message()
+            print('{}   {}'.format(os.getenv("MOMENTA_SEND_TO"), msg[0][1]))
+            do_send_message(os.getenv("MOMENTA_SEND_TO"), msg[0][1])
+            set_done(str(msg[0][0]))
+        except Exception as e:
+            print(e)
+    schedule.every().day.at("13:20").do(job)
+    schedule.every().day.at("10:15").do(job)
+    schedule.every().day.at("20:15").do(job)
+
+    _thread.start_new_thread(sche, ())
+
+    itchat.run(True)
+
 
 @click.group()
 def cli():
@@ -125,6 +150,7 @@ def version():
 
 cli.add_command(subscription)
 cli.add_command(run)
+cli.add_command(run2)
 cli.add_command(version)
 cli.add_command(filter)
 

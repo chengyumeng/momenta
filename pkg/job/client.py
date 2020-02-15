@@ -4,6 +4,7 @@
 import os
 
 import pymongo
+import MySQLdb
 import schedule
 from logbook import Logger
 
@@ -14,6 +15,7 @@ logger = Logger('client')
 
 client = pymongo.MongoClient('mongodb://%s:%s@%s' % (os.getenv('MOMENTA_MONGO_USER'), os.getenv('MOMENTA_MONGO_PASSWORD'),os.getenv('MOMENTA_MONGO_HOST')))
 
+mydb = MySQLdb.connect(passwd=os.getenv('MOMENTA_MYSQL_PASSWD'),db="momenta",host=os.getenv('MOMENTA_MYSQL_HOST'),user=os.getenv('MOMENTA_MYSQL_USER'))
 
 def daily_job():
     for data in client.momenta.subscription.find({'enable': True},
@@ -21,6 +23,21 @@ def daily_job():
         msg = app.do(data['action'])
         print('{}   {} \n {}'.format(data['nickname'], data['action'], msg))
         do_send_message(data['nickname'], msg)
+
+
+def get_message():
+    mycursor = mydb.cursor()
+    mycursor.execute("select * from message where done = 0 limit 5")
+    myresult = mycursor.fetchall()
+    return myresult
+
+def set_done(mid):
+    print("set done")
+    mycursor = mydb.cursor()
+    data = mycursor.execute("update message set done=1 where id=" + mid)
+    print(data)
+    mydb.commit()
+
 
 
 def regist_job():

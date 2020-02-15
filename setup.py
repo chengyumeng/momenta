@@ -19,12 +19,12 @@ class CleanCommand(Command):
 
 
 install_requires = [
-    'itchat==1.3.10', 'pymongo==3.8.0', 'schedule==0.6.0', 'Click==7.0','logbook==1.4.3'
+    'itchat==1.3.10', 'pymongo==3.8.0', 'schedule==0.6.0', 'Click==7.0','logbook==1.4.4', 'mysqlclient==1.4.4'
 ]
 
 
 setup(
-      version='0.1.0',
+      version='0.2.0',
       name='momenta',
       author='ChengTian',
       description='',
