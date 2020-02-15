@@ -131,7 +131,7 @@ def run2(cmdqr):
             print(e)
     schedule.every().day.at("13:20").do(job)
     schedule.every().day.at("10:15").do(job)
-    schedule.every().day.at("20:15").do(job)
+    schedule.every().day.at("20:50").do(job)
 
     _thread.start_new_thread(sche, ())
 
