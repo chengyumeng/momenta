@@ -5,9 +5,9 @@ import re
 
 from logbook import Logger
 
-from pkg.bot.callback import callback
-from pkg.job.client import client
-from pkg.bot.wechat import do_send_message
+from momenta.bot.callback import callback
+from momenta.job.client import client
+from momenta.bot.wechat import do_send_message
 
 logger = Logger('action')
 

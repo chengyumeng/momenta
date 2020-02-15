@@ -12,10 +12,10 @@ import os
 
 
 from logbook import Logger, StreamHandler
-from pkg.bot.wechat import do_send_message
+from momenta.bot.wechat import do_send_message
 
-from pkg.job.client import client, regist_job, get_message, set_done
-from pkg.bot.callback import callback
+from momenta.job.client import client, regist_job, get_message, set_done
+from momenta.bot.callback import callback
 
 Daily = 'daily'
 Sunday = 'sunday'

@@ -7,7 +7,7 @@ import itchat
 
 from logbook import Logger
 
-from pkg.bot.callback import callback
+from momenta.bot.callback import callback
 
 logger = Logger('wechat')
 

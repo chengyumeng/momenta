@@ -1,4 +1,4 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
 
-from pkg.extension import calendar, action
+from momenta.extension import *

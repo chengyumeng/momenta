@@ -7,7 +7,7 @@ import json
 
 from logbook import Logger
 
-from pkg.cron.cron import app
+from momenta.cron.cron import app
 
 msg = """今天是 {},今年的第 {} 周，全年已经过去 {} 天
 

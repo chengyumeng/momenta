@@ -24,13 +24,13 @@ install_requires = [
 
 
 setup(
-      version='0.2.0',
+      version='0.3.0',
       name='momenta',
       author='ChengTian',
       description='',
       long_description='',
       entry_points={
-        "console_scripts": ["momenta=pkg.cmd.cli:cli"]
+        "console_scripts": ["momenta=momenta.cmd.cli:cli"]
       },
       url='https://github.com/Chengyumeng/momenta',
       author_email='792400644@qq.com',
